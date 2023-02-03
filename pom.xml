@@ -15,7 +15,7 @@
 	<name>MR Mentoria Manager</name>
 	<description>Gerenciador de mentorias</description>
 	<properties>
-		<java.version>17</java.version>
+		<java.version>17.0.6</java.version>
 	</properties>
 	<dependencies>
 		<dependency>

@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Profile;
 
 import com.vili.mrmentoria.api.services.DBService;
 import com.vili.mrmentoria.api.services.EmailService;
-import com.vili.mrmentoria.api.services.SmptEmailService;
+import com.vili.mrmentoria.api.services.MockEmailService;
 
 @Configuration
 @Profile("dev")
@@ -24,7 +24,7 @@ public class DevConfig {
 
 	@Bean
 	public boolean instanciateDatabase() throws ParseException {
-		if (!"create".equals(strategy))
+		if (!strategy.startsWith("create"))
 			return false;
 					
 		dbService.instanciateDatabase();
@@ -33,6 +33,6 @@ public class DevConfig {
 
 	@Bean
 	public EmailService emailService() {
-		return new SmptEmailService();
+		return new MockEmailService();
 	}
 }

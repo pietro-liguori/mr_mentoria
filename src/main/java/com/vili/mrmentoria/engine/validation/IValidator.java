@@ -13,12 +13,16 @@ import java.util.regex.Pattern;
 
 import javax.validation.ConstraintValidatorContext;
 
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
 import org.springframework.data.domain.Example;
 
 import com.vili.mrmentoria.engine.IEntity;
 import com.vili.mrmentoria.engine.exceptions.FieldMessage;
+import com.vili.mrmentoria.engine.exceptions.custom.ComponentNotFoundException;
 import com.vili.mrmentoria.engine.exceptions.custom.EnumValueNotFoundException;
 import com.vili.mrmentoria.engine.repositories.IRepository;
+import com.vili.mrmentoria.util.ContextProvider;
 
 public interface IValidator<E extends IEntity> {
 
@@ -530,7 +534,7 @@ public interface IValidator<E extends IEntity> {
 		return true;
 	}
 
-	default <T extends IRepository<E>> List<E> unique(String field, Example<E> example, T repo, boolean required) {
+	default List<E> unique(String field, Example<E> example, IRepository<IEntity> repo, boolean required) {
 		Class<?> probeType = example.getProbeType();
 		List<E> ret = repo.findAll(example);
 		String method = "get" + field.substring(0, 1).toUpperCase() + field.substring(1, field.length());
@@ -645,4 +649,21 @@ public interface IValidator<E extends IEntity> {
 		
 		return aux;
 	}
+	
+	static IRepository<IEntity> getRepository(Class<?> type) {
+		String aux = type.getSimpleName() + "Repository";
+		String bean = aux.substring(0, 1).toLowerCase() + aux.substring(1);
+		return getBean(bean);
+	}
+	
+	@SuppressWarnings("unchecked")
+	private static <E extends IEntity> IRepository<E> getBean(String name) {
+		try {
+			ApplicationContext context = ContextProvider.getApplicationContext();
+			return (IRepository<E>) context.getBean(name);
+		} catch (BeansException e) {
+			throw new ComponentNotFoundException("Component '" + name + "' not found");
+		}
+    }
+
 }

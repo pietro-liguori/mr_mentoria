@@ -3,6 +3,7 @@ package com.vili.mrmentoria.api.controllers;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -10,8 +11,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -41,7 +44,7 @@ public class PagamentoController implements IController<Pagamento, PagamentoDTO>
 	@Override
 	@GetMapping("/{id}")
 	@PreAuthorize("hasAnyRole('ADMIN', 'MENTOR')")
-	public ResponseEntity<Pagamento> findById(Object id) {
+	public ResponseEntity<Pagamento> findById(@PathVariable Object id) {
 		return IController.super.findById(id);
 	}
 	
@@ -62,21 +65,21 @@ public class PagamentoController implements IController<Pagamento, PagamentoDTO>
 	@Override
 	@PostMapping
 	@PreAuthorize("hasAnyRole('ADMIN', 'MENTOR')")
-	public ResponseEntity<Pagamento> insert(PagamentoDTO dto) {
+	public ResponseEntity<Pagamento> insert(@RequestBody @Valid PagamentoDTO dto) {
 		return IController.super.insert(dto);
 	}
 	
 	@Override
 	@PutMapping("/{id}")
 	@PreAuthorize("hasAnyRole('ADMIN', 'MENTOR')")
-	public ResponseEntity<Pagamento> update(PagamentoDTO dto, Object id) {
+	public ResponseEntity<Pagamento> update(@RequestBody @Valid PagamentoDTO dto, @PathVariable Object id) {
 		return IController.super.update(dto, id);
 	}
 	
 	@Override
 	@DeleteMapping("/{id}")
 	@PreAuthorize("hasAnyRole('ADMIN', 'MENTOR')")
-	public ResponseEntity<Void> delete(Object id) {
+	public ResponseEntity<Void> delete(@PathVariable Object id) {
 		return IController.super.delete(id);
 	}
 }

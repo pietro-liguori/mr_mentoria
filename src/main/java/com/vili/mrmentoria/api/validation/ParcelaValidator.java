@@ -11,15 +11,12 @@ import com.vili.mrmentoria.api.domain.Parcela;
 import com.vili.mrmentoria.api.domain.dto.ParcelaDTO;
 import com.vili.mrmentoria.api.domain.enums.StatusPagamento;
 import com.vili.mrmentoria.api.repositories.PagamentoParceladoRepository;
-import com.vili.mrmentoria.api.repositories.ParcelaRepository;
 import com.vili.mrmentoria.api.validation.constraints.ValidParcela;
 import com.vili.mrmentoria.engine.exceptions.FieldMessage;
+import com.vili.mrmentoria.engine.validation.IValidator;
 
 public class ParcelaValidator extends Validator<Parcela> implements ConstraintValidator<ValidParcela, ParcelaDTO> {
 
-	@Autowired
-	private ParcelaRepository parcelaRepository;
-	
 	@Autowired
 	private PagamentoParceladoRepository pagamentoParceladoRepository;
 
@@ -33,7 +30,7 @@ public class ParcelaValidator extends Validator<Parcela> implements ConstraintVa
 	
 	public static List<FieldMessage> validate(ParcelaDTO dto) {
 		ParcelaValidator validator = new ParcelaValidator();
-		validator.entityId("id", dto.getId(), validator.parcelaRepository, dto.isUpdate());
+		validator.entityId("id", dto.getId(), IValidator.getRepository(Parcela.class), dto.isUpdate());
 		validator.notEmpty("valor", dto.getValor(), dto.isInsert());
 		validator.notEmpty("data", dto.getData(), dto.isInsert());
 		validator.enumValue("status", dto.getStatus(), StatusPagamento.class, dto.isInsert());

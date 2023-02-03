@@ -3,6 +3,7 @@ package com.vili.mrmentoria.api.controllers;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -10,8 +11,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -41,7 +44,7 @@ public class ReuniaoController implements IController<Reuniao, ReuniaoDTO> {
 	@Override
 	@GetMapping("/{id}")
 	@PreAuthorize("hasAnyRole('ADMIN', 'MENTOR')")
-	public ResponseEntity<Reuniao> findById(Object id) {
+	public ResponseEntity<Reuniao> findById(@PathVariable Object id) {
 		return IController.super.findById(id);
 	}
 	
@@ -62,21 +65,21 @@ public class ReuniaoController implements IController<Reuniao, ReuniaoDTO> {
 	@Override
 	@PostMapping
 	@PreAuthorize("hasAnyRole('ADMIN', 'MENTOR')")
-	public ResponseEntity<Reuniao> insert(ReuniaoDTO dto) {
+	public ResponseEntity<Reuniao> insert(@RequestBody @Valid ReuniaoDTO dto) {
 		return IController.super.insert(dto);
 	}
 	
 	@Override
 	@PutMapping("/{id}")
 	@PreAuthorize("hasAnyRole('ADMIN', 'MENTOR')")
-	public ResponseEntity<Reuniao> update(ReuniaoDTO dto, Object id) {
+	public ResponseEntity<Reuniao> update(@RequestBody @Valid ReuniaoDTO dto, @PathVariable Object id) {
 		return IController.super.update(dto, id);
 	}
 	
 	@Override
 	@DeleteMapping("/{id}")
 	@PreAuthorize("hasAnyRole('ADMIN', 'MENTOR')")
-	public ResponseEntity<Void> delete(Object id) {
+	public ResponseEntity<Void> delete(@PathVariable Object id) {
 		return IController.super.delete(id);
 	}
 }
